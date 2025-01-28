@@ -12,3 +12,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 neon = "1"
+norg_to_html = { git = "https://github.com/cramt/norg_to_html", branch = "main" }
+serde = "1"
+serde_json = "1"

@@ -1,4 +1,6 @@
 import Module from "node:module";
+import * as fs from "node:fs";
+import type { Loader, LoaderContext } from "astro/loaders";
 
 const require = Module.createRequire(import.meta.url);
 
@@ -12,7 +14,39 @@ const native = require("@neon-rs/load").proxy({
   },
   debug: () => require("../index.node"),
 }) as {
-  hello: () => string;
+  build: (norg: string) => string;
 };
 
-export default native;
+export const loader = (dir: string): Loader => {
+  return {
+    name: "norg",
+    load: async (context: LoaderContext) => {
+      const result = (
+        await Promise.all(
+          (
+            await fs.promises.readdir(dir, {
+              recursive: true,
+            })
+          )
+            .filter((x) => x.endsWith(".norg"))
+            .map((x) => [x.replace(".norg", ""), dir + "/" + x])
+            .map(async ([name, path]) => [
+              name,
+              await fs.promises.readFile(path),
+            ]),
+        )
+      ).map(([k, v]) => [k, JSON.parse(native.build(v.toString("utf8")))]);
+      result.forEach(([id, data]) =>
+        context.store.set({
+          id,
+          data,
+          rendered: {
+            html: data.html,
+            metadata: { frontmatter: data.metadata },
+          },
+          digest: context.generateDigest(data),
+        }),
+      );
+    },
+  };
+};

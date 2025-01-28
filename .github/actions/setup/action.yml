@@ -1,31 +1,31 @@
-name: 'Setup Neon'
-description: 'Setup the Neon toolchain.'
+name: "Setup Neon"
+description: "Setup the Neon toolchain."
 inputs:
   platform:
-    description: 'Platform being built for.'
+    description: "Platform being built for."
     required: false
-    default: ''
+    default: ""
   use-rust:
-    description: 'Install Rust?'
+    description: "Install Rust?"
     required: false
-    default: 'true'
+    default: "true"
   use-cross:
-    description: 'Install cross-rs?'
+    description: "Install cross-rs?"
     required: false
-    default: 'false'
+    default: "false"
   workspace:
-    description: 'Path to workspace being setup.'
+    description: "Path to workspace being setup."
     required: false
-    default: '.'
+    default: "."
 outputs:
   rust:
-    description: 'Rust version installed.'
+    description: "Rust version installed."
     value: ${{ steps.rust.outputs.version }}
   node:
-    description: 'Node version installed.'
+    description: "Node version installed."
     value: ${{ steps.node.outputs.version }}
   target:
-    description: 'Rust target architecture installed.'
+    description: "Rust target architecture installed."
     value: ${{ steps.target.outputs.target }}
 runs:
   using: "composite"
@@ -43,8 +43,8 @@ runs:
         registry-url: ${{ env.NPM_REGISTRY }}
         cache: npm
     - name: Install Dependencies
-      shell: bash  
-      run: npm ci   
+      shell: bash
+      run: npm ci
     - name: Compute Rust Target
       if: ${{ inputs['use-rust'] == 'true' }}
       id: target
