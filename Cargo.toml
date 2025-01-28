@@ -1,0 +1,3 @@
+[workspace]
+members = ["crates/norg_astro"]
+resolver = "2"
