@@ -1,7 +1,7 @@
 {
   "name": "@norg_astro/darwin-arm64",
   "description": "Prebuilt binary package for `norg_astro` on `darwin-arm64`.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "os": [
     "darwin"
   ],
